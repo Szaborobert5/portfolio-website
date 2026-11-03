@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        :root {
+            --bg: #1d1f21;
+            --text: #c5c8c6;
+            --heading: #f8f8f2;
+            --accent: #cc6666;
+            --border: #373b41;
+            --card-bg: #282a2e;
+        }
+
+        /* Light Theme overrides when 'light-mode' class is active on body */
+        body.light-mode {
+            --bg: #fdfdfd;
+            --text: #383a42;
+            --heading: #222326;
+            --accent: #5be449;
+            --border: #d0d0d0;
+            --card-bg: #f0f0f1;
+        }
+
+        body {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 750px;
+        }
+
+        /* Header Layout: Name/Nav on left, Profile Pic on right */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .site-title {
+            font-size: 1.75rem; /*Naslovni*/
+            font-weight: bold;
+            color: var(--heading);
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.75rem; /*LinkedIn,GitHub, etc...*/
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .profile-pic-container {
+        width: 220px;
+        height: 220px;
+        border: 1px solid var(--border);
+        background-color: var(--card-bg);
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+        }
+
+        .profile-pic-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image scales properly inside the box */
+        }
+
+        /* Button */
+        .theme-toggle-btn {
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.4rem;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            border:none;
+            outline:none;
+        }
+
+        /* Top Section now just contains Hello World and Bio */
+        .intro-section {
+            margin-bottom: 40px;
+        }
+
+        .intro-section h1 {
+            font-size: 1.1rem; /*Hello World*/
+            color: var(--heading);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .intro-section p {
+            line-height: 1.6;
+            font-size: 0.7rem; /*Intro text o meni*/
+            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-size: 0.95rem; /* Expirience naslovna */
+            color: var(--heading);
+            border-bottom: 1px dashed var(--border);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .experience-item {
+            margin-bottom: 25px;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .job-title {
+            color: var(--heading);
+            font-weight: bold;
+            font-size: 0.72rem;
+        }
+
+        .job-date {
+            color: var(--accent);
+            font-size: 0.5rem;
+        }
+
+        .job-description {
+            margin: 0;
+            color: var(--text);
+            font-size: 0.7rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }     
+
+        .job-description a {
+            color: #cc6666
+        }
+        
+        .experience-images{
+            display: flex;
+            gap: 15px; /*Space between the two pics*/
+            margin-top: 15px; /*Space between text and photos*/
+        }
+
+
+        .experience-img-card img {
+            width: 85%;
+            height: 95%;
+            justify-content: center;
+           /* object-fit: cover;*/ /* Ensures photos scale nicely without distorting */
+        }
+
+        .experience-img-card2 img {
+            width: 95%;
+            height: 95%;
+            justify-content: center;
+           /* object-fit: cover;*/ /* Ensures photos scale nicely without distorting */
+        }
+
+        /* 1. Ensure grid columns share space equally */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 equal-width columns */
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        /* 2. Stretch the link wrapper to fill grid height */
+        .project-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* 3. Give cards a uniform layout */
+        .project-card {
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .project-card-link:hover .project-card {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* 4. Fix image container height so ALL photos crop to the exact same dimension */
+        .project-card-img {
+            width: 100%;
+            height: 280px; /* Set a uniform fixed height (adjust height to your liking, e.g., 140px - 180px) */
+            overflow: hidden;
+            background-color: var(--bg);
+        }
+
+        .project-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crops center of photos equally without distorting aspect ratios */
+        }
+
+        /* 5. Center title underneath */
+        .project-card-title {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--heading);
+            font-weight: bold;
+            margin-top: auto; /* Keeps titles aligned at the bottom across cards */
+        }
+
+        /* Footer Nav */
+        footer {
+            margin-top: 50px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1rem; /*Notes */
+        }
+
+
+        /* Form section */
+        .interactive-section {
+            margin-top: 40px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        /*skills*/
+
+        /* Skills Container */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        /* Individual Skill Badge */
+        .skill-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--heading);
+            transition: border-color 0.2s;
+        }
+
+        .skill-badge:hover {
+            border-color: var(--accent);
+        }
+
+        /* Skill Icon Image */
+        .skill-badge img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+       
+            </style>
+        </head>
+        <body>
+
+    <div class="wrapper">
+        <!-- Header & Profile Pic aligned side-by-side at the top -->
+        <header>
+            <div>
+                <div class="site-title">My Name</div>
+                <nav>
+                    <a href="https://linkedin.com/in/róbert-szabó-6750b137a" target="_blank">LinkedIn</a>  | 
+                    <a href="https://github.com/Szaborobert5">GitHub</a> | 
+                    <a href="#">robicaner@gmail.com</a>   | 
+                    <a href="resume.pdf" download="My_Name_CV.pdf">CV</a> |
+                </nav>
+                <button class ="theme-toggle-btn" id="toggleDayAndNight" onclick = "toggleDayAndNight()">
+                    <span id="themeIcon">☀️</span> <span id="themeText">Light Mode</span>
+                </button>
+            </div>
+            <div class="profile-pic-container">
+                <img src="media/profile_pic/profile_pic.jpeg" alt="My Profile Picture">
+            </div>
+        </header>
+
+        <!-- Intro / Bio Section with space below name -->
+        <div class="intro-section">
+            <h1>Hello World!</h1>
+            <p>
+                I'm Robert, a recent Electrical and Computer Engineering graduate from the Faculty of Technical Sciences at the University of Novi Sad, where I graduated in September 2026.
+            </p>
+
+            <p>
+                I'm passionate about low-level programming, computer architecture, embedded systems, and hardware design. I enjoy exploring how things work from software interacting with hardware.
+            </p>
+            <p>
+                Beyond engineering, I'm fluent in three languages: English, Serbian, and Hungarian.
+            </p>
+            <p>
+                Welcome to my barebone c++ portfolio webserver, where I present to you some of my work. Have a gander!
+            </p>
+
+        </div>
+
+        <!-- Experience Section -->
+        <h2>Experience</h2>
+        <div class="experience-item">
+            <div class ="job-header">
+                <span class="job-title">Undergrad research assistant</span>
+                <span class="job-date">Aug. 2025 — Nov. 2025</span>
+            </div>
+            <p class="job-description">
+                I was assigned to design and prototype two types of energy harvesting circuits: thermal and vibration-based. I developed both prototypes using a thermoelectric generator, a piezoelectric energy harvester, and using suitable boost converter integrated circuits. After assembling and testing the circuits on a protoboard using an oscilloscope, I designed a custom two-layer PCB in Altium Designer. Once manufactured, I assembled and tested the PCB, confirming that it worked as expected.
+            </p>
+            <p class="job-description">
+                The project was later extended as part of a research project focused on increasing the reading range of RFID tags. I connected the thermal energy harvesting circuit to an RFID tag and demonstrated that harvesting energy could increase its reading distance. A solar energy harvesting circuit was also tested and produced similar results.
+            </p>
+
+            <p class="job-description">
+                Following the measurements, I co-authored a research paper that was accepted by IEEE. The work was also presented at the Horizon of Innovations event, where I had the opportunity to discuss our findings.
+            </p>
+
+            <p class="job-description">
+                The link of the paper can be seen
+                <a href="https://ieeexplore.ieee.org/abstract/document/11449587" target="_blank">here</a>.
+            </p>
+
+
+            <div class = "experience-images"> 
+                <div class="experience-img-card2">
+                    <img src="media/energyHarvesting/termo.gif" alt="Experience Photo 1">
+                </div>
+
+                <div class="experience-img-card" alt="Experience Photo 2">
+                    <img src="media/energyHarvesting/poster.png">
+                </div>
+
+            </div>
+
+            
+
+        </div>
+
+
+        <!-- Projects Section -->
+        <h2 style="text-align: center;">Projects</h2>
+        <div class="projects-grid">
+            <!-- First project*/ -->
+            <a href="https://github.com/Szaborobert5/Electrical-Measuring-System" target="_blank" class="project-card-link">
+                <div class="project-card">
+                    <div class="project-card-img">
+                        <img src="media/electricalEnergySystem/PCB_IRL.jpg" alt="Project 1 Preview">
+                    </div>
+                <div class="project-card-title">Electrical measuring system ↗</div>
+            </div>
+        </a>
+
+        <!-- second project*/ -->
+        <a href = "https://github.com/Szaborobert5/Greenhouse-project-" target = "_blank" class = "project-card-link">
+            <div class = "project-card">
+                <div class = "project-card-img">
+                    <img src = "media/greenHouse/greenhouse.png" alt="Project 1 preview">
+                </div>
+                    <div class = "project-card-title">Automated greenhouse ↗</div>
+            </div>
+        </a>
+
+        <!-- Third project*/ -->
+         <a href = "https://github.com/Szaborobert5/Birch-antenna" target ="_blank" class = "project-card-link">
+            <div class = "project-card">
+                <div class = "project-card-img">
+                    <img src = "media/birchAntenna/antenna_IRL.png">
+                </div>
+                    <div class = "project-card-title"> Birch antenna ↗</div>
+            </div>
+         </a>
+
+         <!-- 4th project-->
+         <a href = "https://github.com/Szaborobert5/Raspberry-pi-pico-W-controlled-RC-car" target ="_blank" class = "project-card-link">
+            <div class = "project-card">
+                <div class="project-card-img">
+                    <img src = "media/rpCar/RC_car.gif">
+                </div>
+                    <div class = "project-card-title">Raspberry Pi Pico W RC car ↗</div>
+            </div>
+         </a>
+
+         <a href = "https://github.com/Szaborobert5/Weather-app/tree/main" target ="_blank" class = "project-card-link">
+            <div class = "project-card">
+                <div class="project-card-img">
+                    <img src = "media/pythonWeatherApp/weatherApp.png">
+                </div>
+                    <div class = "project-card-title">Python desktop weather app ↗</div>
+            </div>
+         </a>
+
+         <a href = "https://github.com/Szaborobert5/ROS2-xArm7-robotic-arm-cube-solver" target ="_blank" class = "project-card-link">
+            <div class = "project-card">
+                <div class="project-card-img">
+                    <img src = "media/ROS2_robotic_arm/video_dem.gif">
+                </div>
+                    <div class = "project-card-title">Robotic cube solver ↗</div>
+            </div>
+         </a>
+
+        </div>
+
+
+        <h2 style="text-align: center;">The things I am passionate about learning more about everyday</h2>
+        <div class ="skills-container">
+            <!--C-->
+             <div class="skill-badge">
+                <img src="media/skills/c.png" alt="C Logo">
+            </div>
+
+            <!--Cpp-->
+            <div class="skill-badge">
+                <img src="media/skills/cpp.png" alt="C Logo">
+            </div>
+            
+            <!--Linux-->
+            <div class="skill-badge">
+                <img src="media/skills/linux.png" alt="C Logo">
+            </div>
+
+            <!--Python-->
+            <div class="skill-badge">
+                <img src="media/skills/python.png" alt="C Logo">
+            </div>
+
+            <!--git-->
+            <div class="skill-badge">
+                <img src="media/skills/git.png" alt="C Logo">
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function toggleDayAndNight() {
+            const body = document.body;
+            body.classList.toggle('light-mode');
+            
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            
+            if (body.classList.contains('light-mode')) {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+            } else {
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+            }
+        }
+
+    </script>
+
+</body>
+</html>
